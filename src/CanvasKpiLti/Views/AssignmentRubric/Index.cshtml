@@ -1,0 +1,282 @@
+@using CanvasIdentity.Extensions
+@using Microsoft.AspNetCore.Hosting;
+@using Microsoft.Extensions.Hosting;
+@inject IWebHostEnvironment Env
+@model CanvasKpiLti.Models.AssignmentRubricViewModel;
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+
+    string[] activitiesHbo = { "Analysis", "Advise", "Design", "Realisation", "Manage&Control" };
+    string[] activitiesPo = { "FOO", "IPS", "PL", "TI", "" };
+
+}
+
+@functions {
+
+    void DoCard(string[] activities, string architecktuur)
+    {
+        foreach (var activity in activities)
+        {  // een cell
+            <div class="card">
+                <div class="desc" data-arch="User-1">
+                    @foreach (var card in @Model.Cards.Where(w => w.Activitiet == activity && w.Architecktuur == architecktuur))
+                    {
+                        var his = card.CourseHistory.Count > 0 ? "MasteredHistory" : "";
+                        var dkpi = card.Points != null ? "data-kpi-point="+ card.Points : "";
+                        <div class="medal @his" @dkpi data-outcomeId="@card.OutcomeId" data-criteriaId="@card.Id">
+                            @card.Niveaus
+                            <p style="display: none;">
+                                @card.LongDescription
+                                @if (Env.IsDevelopment())
+                                {
+                                    @card.DebugTxt
+                                }
+                            </p>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    }
+
+}
+
+
+<div class="flex-container">
+    <div id="cardview" class="flex-card flex-card-view">
+        
+        <div class="flex-card">
+            <br/>
+            <div>
+                <div style="display: inline-block;padding-left: 20px;">
+                    <h2 style="display: inline;"> @Model.StudentName</h2>
+                </div>
+                <div style="display: inline-block; float: right; padding-right: 20px; ">
+                    <input style="display: inline;" id="saveUp" type="button" value="Save" class="save btn btn-primary"/>
+                </div>
+            </div>
+            
+            <br/>
+            <div class="flex-container">
+                <div class="card">
+                </div>
+                <div class="card">
+                    <div class="medal-bot">
+                        Future-Oriented Organisation
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="medal-bot">
+                        Investigative Problem Solving
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="medal-bot">
+                        Personal Leadership
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="medal-bot">
+                        Targeted Interaction
+                    </div>
+                </div>
+                <div class="card">
+                </div>
+            </div>
+
+            <div class="flex-container">
+                <div class="card PO">
+                    <div class="open" onclick="open_kpi_arch(this);"></div>
+                    <div class="medal-bot">
+                        Professional Development
+                        <p style="display: none;">Effective professional development enables students to develop the knowledge and skills they need to address challenges.</p>
+                    </div>
+                </div>
+                @{ DoCard(activitiesPo, "po"); }
+            </div>
+
+            <br/>
+
+            <div class="flex-container">
+                <div class="card"></div>
+                <div class="card">
+                    <div class="title">Analysis</div>
+                </div>
+                <div class="card">
+                    <div class="title">Advise</div>
+                </div>
+                <div class="card">
+                    <div class="title">Design</div>
+                </div>
+                <div class="card">
+                    <div class="title">Realisation</div>
+                </div>
+                <div class="card">
+                    <div class="title">Manage&amp;Control</div>
+                </div>
+            </div>
+
+            <div class="flex-container">
+                <div class="card User">
+                    <div class="open" onclick="open_kpi_arch(this);"></div>
+                    <div class="medal-bot">
+                        User Interaction
+                    </div>
+                </div>
+                @{ DoCard(activitiesHbo, "U"); }
+            </div>
+
+            <div class="flex-container">
+
+                <div class="card Software">
+                    <div class="open" onclick="open_kpi_arch(this);"></div>
+                    <div class="medal-bot">
+                        Software
+                    </div>
+                </div>
+                @{ DoCard(activitiesHbo, "S"); }
+            </div>
+
+            <div class="flex-container">
+
+                <div class="card Hardware">
+                    <div class="open" onclick="open_kpi_arch(this);"></div>
+                    <div class="medal-bot">
+                        Hardware Interfacing
+                    </div>
+                </div>
+                @{ DoCard(activitiesHbo, "H"); }
+            </div>
+
+            <div class="flex-container">
+
+                <div class="card Infrastructure">
+                    <div class="open" onclick="open_kpi_arch(this);"></div>
+                    <div class="medal-bot">
+                        Infrastructure
+                    </div>
+                </div>
+                @{ DoCard(activitiesHbo, "I"); }
+            </div>
+
+            <div class="flex-container">
+
+                <div class="card Organisational">
+                    <div class="open" onclick="open_kpi_arch(this);"></div>
+                    <div class="medal-bot">
+                        Organisational processes
+                    </div>
+                </div>
+                @{ DoCard(activitiesHbo, "O"); }
+            </div>
+            <div style="padding: 20px; display: inline-block; float: right">
+                <input id="saveDown" type="button" value="Save" class="save btn btn-primary"/>
+                </div>
+            <br/>
+            <br/>
+            <br/>
+            
+        </div>
+        
+        
+    </div>
+    @if (User.CanvasClaims().IsCanvasInstructor())
+    {
+        <div id="student" class="flex-card flex-stud-view">
+            <div class="flex-card">
+                <input style="width: 100%" type="text" id="SearchInput" onkeyup="SearchStudent()" placeholder="Search for names.." title="Type in a name">
+                <ul id="studUL">
+                    @foreach (var student in Model.Students)
+                    {
+                        var selectedStudent = "";
+                        if (student.Name == Model.StudentName) selectedStudent = "selectedStudent";
+                        <li>
+                            <a class="@selectedStudent" asp-controller="AssignmentRubric" asp-action="Index" asp-route-session="@User.CanvasClaims().CanvasCourseId" asp-route-userId="@student.Id">@student.Name</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    }
+</div>
+
+
+<br/>
+
+<script>
+		const assignmentId = @Model.AssignmentId;
+        const userId = @Model.UserId;
+        const courseId = @User.CanvasClaims().CanvasCourseId;
+
+        
+        
+        $(document).ready(function(){
+          
+            $.ajaxSetup({
+             xhrFields: {
+               withCredentials: true
+             }
+           });
+           
+           $(window).on("beforeunload", function () {
+                if (dirty) {
+                    console.log("dirty !");
+                    return "Please don't leave before saving.";
+                    } else {
+                        console.log("not dirty !");
+                        return;
+                    }
+           });
+           
+            function config()
+            		{	
+            			if ('@User.CanvasClaims().IsCanvasInstructor()' === 'True')
+            			{
+            				config_teacher();
+            			}
+            			else
+            			{
+            				config_student();
+            			} 
+            		}
+            config(); 
+
+            $(".save").prop("disabled",true)
+            .click(function(){
+            
+                let send={};
+                send.assignmentId = assignmentId;
+                send.userId = userId;
+                send.points=[];
+                    
+                const medal = document.querySelectorAll('.medal');
+                medal.forEach(function(med)
+                 {
+                     let criterionIdOutcomeIdAndPoint={};
+                     criterionIdOutcomeIdAndPoint.point = med.getAttribute('data-kpi-point');
+                     criterionIdOutcomeIdAndPoint.outcomeId = med.getAttribute('data-outcomeId');
+                     criterionIdOutcomeIdAndPoint.criteriaId = med.getAttribute('data-criteriaId');
+                     
+                     send.points.push(criterionIdOutcomeIdAndPoint); 
+                });
+            
+                $.ajax({
+                       url: '@Url.Action("SubmissionCriteriaRating", "AssignmentRubric")?session='+courseId,
+                       type: "POST",
+                       data: send,
+                       success: function () {
+                           alert("Submissions Saved!");
+                           setDirty(false);
+                            },
+                       error: function (xhr) {
+                          alert('Error: '+ xhr.responseText);
+                       }
+                });             
+            });
+            
+            
+        });
+	
+</script>

@@ -1,0 +1,44 @@
+﻿
+
+@using Microsoft.AspNetCore.Identity
+@using CanvasIdentity.Extensions
+@{
+    ViewData["Title"] = "Home Page";
+}
+<style>
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #D6EEEE;
+}
+</style>
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+
+    <h2>time: @ViewData["cachedTimeUTC"]</h2>
+    <p>POC Canvas KPI</p> 	
+    
+    <table>
+        <tr>
+            <th>Name</th><th>Value</th>
+        </tr>
+        @foreach (var t in @User.Claims)
+        {
+            <tr>
+                <td>@t.Type</td><td>@t.Value</td>
+            </tr>
+        }
+        <tr>
+            <td>Token</td><td>@ViewData["token"]</td>
+        </tr>
+    </table>
+</div>

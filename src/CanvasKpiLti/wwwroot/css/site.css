@@ -1,0 +1,164 @@
+body{
+  font-family: Helvetica;
+  margin:0;
+}
+
+.flex-container {
+  display: flex;
+}
+
+#cardview .flex-card{
+  background-color: #e0e0e0;
+}
+ul{
+  list-style: none;
+  padding-left: 0.5rem;
+}
+ul a{
+  font-size: 12px;
+}
+
+.flex-stud-view{
+ width: 250px;
+}
+
+.flex-card-view{
+  width: 100%;
+}
+.flex-container .card {
+  background-color: #f1f1f1;
+  margin: 1px;
+  padding: 2px;
+  width: 100%;
+}  
+.desc{
+  font-size: 12px;
+  line-height: 1.4;
+  color:black;
+}
+
+.title{
+  display: inline-block;
+  font-size: 12px;
+  padding: 2px;
+}
+
+.open {
+  margin:3px;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 10px solid black;
+  float:right;
+  cursor:pointer;
+  transform: rotate(-90deg);
+}
+
+
+.PO{
+  background:#e6c300!important;
+}
+.User{
+  background:#e29c53!important;;
+}
+.Software{
+  background:#96b9c0!important;;
+}
+.Hardware{
+  background:#8d9292!important;;
+}
+.Infrastructure{
+  background:#6ea7d4!important;;
+}
+.Organisational{
+  background:#d16557!important;;
+}
+
+[data-kpi-point="0"]
+{
+  /* error */
+  background-color: red;
+}
+[data-kpi-point="1"]{
+  /* stud advice */
+  background-color: yellow;
+}
+[data-kpi-point="2"]{
+  /*mastered*/
+  background-color: green;
+}
+.MasteredHistory[data-kpi-point="1"]
+{
+  /* stud advice */
+  background-color: yellow;
+  border: 2px solid  lawngreen;
+}
+
+.MasteredHistory[data-kpi-point="2"]
+{
+  /*mastered*/
+  background-color: green;
+  border: 2px solid  lawngreen;
+}
+.MasteredHistory
+{
+  background-color: lawngreen;
+}
+
+.medal {
+  position: relative;
+  display: inline-block;
+  border: 2px dotted darkgray;
+  padding: 1px;
+  margin: 1px;
+  width: fit-content;
+}
+
+.medal p{
+  display: none;
+}
+
+.selectedStudent{
+  color: darkblue;
+}
+.medal-bot {
+  position: relative;
+  display: inline-block;
+  padding: 1px;
+  margin: 1px;
+  width: fit-content;
+  font-size: 11px;
+}
+
+.medal-bot p {
+  visibility: hidden;
+  width: 200px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.medal-bot p::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.medal-bot:hover p {
+  visibility: hidden;
+  opacity: 1;
+}
