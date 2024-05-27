@@ -1,0 +1,8 @@
+@startuml
+Matrix --> "*" Architecture
+Architecture --> "*" Cell
+Cell --> "*" OutcomeGroup
+OutcomeGroup --> "*" OutcomeResult
+
+Matrix --> "1" AssignmentRubric
+@enduml

@@ -48,8 +48,24 @@ dotnet ef migrations add Outcome
 dotnet ef database update
 
 # Caching
-// todo https://learn.microsoft.com/en-us/aspnet/core/performance/caching/distributed?view=aspnetcore-7.0
+// https://learn.microsoft.com/en-us/aspnet/core/performance/caching/distributed?view=aspnetcore-7.0
 // https://dejanstojanovic.net/aspnet/2018/may/using-idistributedcache-in-net-core-just-got-a-lot-easier/
 dotnet sql-cache create "Server=127.0.0.1,1433;Database=kpiDb;User ID=sa;Password=MyPass@word;TrustServerCertificate=True;MultiSubnetFailover=True;MultipleActiveResultSets=true" dbo WebCache
 
 dotnet sql-cache create "Server=(localdb)\MSSQLLocalDB;Database=kpiDb;TrustServerCertificate=True;MultiSubnetFailover=True;MultipleActiveResultSets=true" dbo WebCache
+
+## uml
+https://plantuml.com
+https://github.com/Zingam/UML-in-Markdown/blob/master/README.md
+https://blog.jetbrains.com/dotnet/2020/10/06/create-uml-diagrams-using-plantuml/
+
+![Class Diagram](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/Zingam/Markdown-Document-UML-Use-Test/master/UML/Instance.puml)
+
+
+@startuml
+Alice -> Bob: Authentication Request
+Bob --> Alice: Authentication Response
+
+Alice -> Bob: Another authentication Request
+Alice <-- Bob: Another authentication Response
+@enduml
