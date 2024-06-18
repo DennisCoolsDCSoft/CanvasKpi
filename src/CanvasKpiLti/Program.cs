@@ -115,6 +115,8 @@ public class Program
             options.Filters.Add(new AuthorizeFilter(policy));
         });
 
+        
+        
         builder.Services.AddDistributedSqlServerCache(options =>
         {
             options.ConnectionString = builder.Configuration.GetConnectionString("CanvasKpiLtiContext")
@@ -124,6 +126,8 @@ public class Program
             options.TableName = "WebCache";
         });
         builder.Services.AddHttpContextAccessor();
+        
+        
         builder.Services.AddTransient<TokenStore>();
 
         builder.Services.AddHttpClient<ICanvasGraphQlHttpClient, CanvasGraphQlHttpClient>(client =>
@@ -140,12 +144,13 @@ public class Program
             client.BaseAddress = new Uri(_configuration["CanvasApi:baseUrl"]!);
         });
 
+        // Infrastructure
         builder.Services.AddTransient<IAssignmentGroupsDao, AssignmentGroupsDao>();
         builder.Services.AddTransient<IAssignmentRubricCriteriaRatingDao, AssignmentRubricCriteriaRatingDao>();
         builder.Services.AddTransient<IAssignmentRubricDao, AssignmentRubricDao>();
         builder.Services.AddTransient<IStudentDao, StudentDao>();
 
-        //biz
+        //Domain
         builder.Services.AddTransient<CardCollection>();
         builder.Services.AddTransient<UserCollection>();
         builder.Services.AddTransient<AssignmentGroups>();

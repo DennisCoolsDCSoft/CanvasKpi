@@ -1,5 +1,6 @@
 ﻿
 
+using System.Runtime.CompilerServices;
 using CompetenceProfilingDomain.Contracts;
 using CompetenceProfilingDomain.Contracts.models;
 using Microsoft.EntityFrameworkCore;
@@ -53,5 +54,7 @@ namespace CompetenceProfilingInfrastructure.Data
         {
             return SaveChanges();
         }
+        
+       
     }
 }

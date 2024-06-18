@@ -3,7 +3,6 @@ using CompetenceProfilingDomain.Contracts.models;
 using CompetenceProfilingDomain.Contracts.ModelsCanvas;
 using CompetenceProfilingDomain.Extensions;
 using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.EntityFrameworkCore;
 
 namespace CompetenceProfilingDomain.Domain;
 

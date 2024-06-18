@@ -1,8 +1,29 @@
 @startuml
+class Matrix {
+   flightNumber : Integer
+   departureTime : Date
+   Getall()
+}
+
+class Cell{
+MaxLevel : level
+}
+
+class OutcomeGroup{
+Level:Level
+}
+
+
 Matrix --> "*" Architecture
-Architecture --> "*" Cell
+
+Architecture --> "*" Competences
+Competences  --> "1" Cell
 Cell --> "*" OutcomeGroup
 OutcomeGroup --> "*" OutcomeResult
+OutcomeResult "1"<-- OutcomeResultCollection
+OutcomeResultCollection --> "1" AssignmentRubric
 
 Matrix --> "1" AssignmentRubric
+
 @enduml
+
