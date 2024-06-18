@@ -1,6 +1,6 @@
 using CompetenceProfilingDomain.Contracts;
-using CompetenceProfilingDomain.Contracts.models;
 using CompetenceProfilingDomain.Contracts.ModelsCanvas;
+using CompetenceProfilingDomain.Contracts.ModelsDatabase;
 using CompetenceProfilingDomain.Extensions;
 using Microsoft.Extensions.Caching.Distributed;
 
@@ -27,9 +27,9 @@ public class CardCollection
         var rubricCriteria = RubricCriteria(assignmentId);
         
         var submissionsCanvas = _assignmentRubricCriteriaRatingDao.SubmissionsByCourseAndAssignmentAndUser(courseId, assignmentId, userId);
-        var submissionsStudent = _repository.Query<StudentAdvice>().Where(w => w.CourseId == courseId & w.UserId == userId).ToList();
+        var submissionsStudent = _repository.Query<StudentAdviceDto>().Where(w => w.CourseId == courseId & w.UserId == userId).ToList();
         //var studKpi = _databaseContext.StudentKpi.Where(w => w.UserId == userId && w.CourseId != courseId).ToList();
-        var studKpi = _repository.Query<StudentKpi>().Where(w => w.UserId == userId && w.CourseId != courseId).ToList();
+        var studKpi = _repository.Query<StudentKpiDto>().Where(w => w.UserId == userId && w.CourseId != courseId).ToList();
         
         var ret = new List<Card>();
         foreach (var criteria in rubricCriteria)
@@ -108,7 +108,7 @@ public class CardCollection
         Console.WriteLine("Start UpdateRubricSubmissionsDatabase");
         //var t = RubricCriteria(assignmentId);
         
-        var studOutcomes = _repository.Query<StudentKpi>().Where(f => f.UserId == userId && f.CourseId == courseId).ToList();
+        var studOutcomes = _repository.Query<StudentKpiDto>().Where(f => f.UserId == userId && f.CourseId == courseId).ToList();
         foreach (var point in points)
         {
             if(point.Point == (int)PointScale.StudentAdvice) continue;
@@ -127,7 +127,7 @@ public class CardCollection
         // var e = _databaseContext.StudentKpi.FirstOrDefault(f =>
         //     f.OutcomeId == outcomeId && f.UserId == userId && f.CourseId == courseId);
         
-        var e =  _repository.Query<StudentKpi>().FirstOrDefault(f =>
+        var e =  _repository.Query<StudentKpiDto>().FirstOrDefault(f =>
             f.OutcomeId == outcomeId && f.UserId == userId && f.CourseId == courseId);
         if (e != null)
         {
@@ -139,7 +139,7 @@ public class CardCollection
         }
         else
         {
-            var newPoint = new StudentKpi()
+            var newPoint = new StudentKpiDto()
             {
                 UserId = userId,
                 CourseId = courseId,
@@ -206,7 +206,7 @@ public class CardCollection
     private void UpdateStudentAdvicesDatabase(int courseId, int userId, IReadOnlyList<PointViewModel> points)
     {
         var studentAdvicesByCourse =
-            _repository.Query<StudentAdvice>().Where(w => w.UserId == userId && w.CourseId == courseId).ToList();
+            _repository.Query<StudentAdviceDto>().Where(w => w.UserId == userId && w.CourseId == courseId).ToList();
 
         foreach (var criteriaPoint in points)
         {
@@ -215,7 +215,7 @@ public class CardCollection
             {
                 if (criteriaPoint.Point == (int)PointScale.StudentAdvice)
                 {
-                    var ent = _repository.Query<StudentAdvice>()
+                    var ent = _repository.Query<StudentAdviceDto>()
                         .First(w => w.UserId == userId && w.CourseId == courseId && w.CriteriaId == criteriaPoint.CriteriaId);
                     ent.Point = (int)PointScale.StudentAdvice;
                 }
@@ -229,7 +229,7 @@ public class CardCollection
             {
                 if (criteriaPoint.Point == (int)PointScale.StudentAdvice)
                 {
-                    _repository.Add(new StudentAdvice()
+                    _repository.Add(new StudentAdviceDto()
                     {
                         CriteriaId = criteriaPoint.CriteriaId,
                         CourseId = courseId,

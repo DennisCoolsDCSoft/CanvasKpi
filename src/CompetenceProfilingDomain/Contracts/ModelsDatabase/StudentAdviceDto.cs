@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CompetenceProfilingDomain.Contracts.models
+namespace CompetenceProfilingDomain.Contracts.ModelsDatabase
 {
-    public class StudentAdvice
+    public class StudentAdviceDto
     {
         [Key]
         public int Id { get; set; }

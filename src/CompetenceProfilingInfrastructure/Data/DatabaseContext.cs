@@ -2,26 +2,48 @@
 
 using System.Runtime.CompilerServices;
 using CompetenceProfilingDomain.Contracts;
-using CompetenceProfilingDomain.Contracts.models;
+using CompetenceProfilingDomain.Contracts.ModelsDatabase;
 using Microsoft.EntityFrameworkCore;
 
 namespace CompetenceProfilingInfrastructure.Data
 {
 
 
-    public class DatabaseContext : DbContext,IRepository
+    public class DatabaseContext : DbContext, IRepository
     {
         public DatabaseContext(DbContextOptions<DatabaseContext> options)
             : base(options)
         {
-            //Database.Migrate();
+            base.Database.Migrate();
         }
-     
-        public DbSet<StudentAdvice> StudentAdvices { get; set; } = null!;
 
-        public DbSet<StudentKpi> StudentKpi { get; set; } = null!;
-        
-        
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<TreeRootCanvasDto>().HasKey(k => k.Id);
+            modelBuilder.Entity<OutcomesCanvasDto>().HasKey(k => k.LmsId);
+
+
+            //https://learn.microsoft.com/en-us/ef/core/modeling/relationships/many-to-many
+            modelBuilder.Entity<TreeRootCanvasDto>()
+                .HasMany(e => e.OutcomesCanvas)
+                .WithMany(e => e.TreeRootsCanvas)
+                .UsingEntity(
+                    "TreeRootOutcome",
+                    l => l.HasOne(typeof(OutcomesCanvasDto)).WithMany().HasForeignKey("OutcomesLmsId")
+                        .HasPrincipalKey(nameof(OutcomesCanvasDto.LmsId)),
+                    r => r.HasOne(typeof(TreeRootCanvasDto)).WithMany().HasForeignKey("TreeRootId")
+                        .HasPrincipalKey(nameof(TreeRootCanvasDto.Id)),
+                    j => j.HasKey("OutcomesLmsId", "TreeRootId"));
+        }
+
+        public DbSet<StudentAdviceDto> StudentAdvices { get; set; } = null!;
+        public DbSet<StudentKpiDto> StudentKpi { get; set; } = null!;
+
+        public DbSet<TreeRootCanvasDto> TreeRootCanvas { get; set; }
+        public DbSet<OutcomesCanvasDto> OutcomesCanvas { get; set; }
+
+
+
         void IRepository.Add<TEntity>(TEntity entity)
         {
             Add<TEntity>(entity);
@@ -36,7 +58,7 @@ namespace CompetenceProfilingInfrastructure.Data
         {
             Remove<TEntity>(entity);
         }
-        
+
         IQueryable<TEntity> IRepository.Query<TEntity>()
         {
             return Set<TEntity>();
@@ -54,7 +76,5 @@ namespace CompetenceProfilingInfrastructure.Data
         {
             return SaveChanges();
         }
-        
-       
     }
 }

@@ -40,12 +40,14 @@ create first table with azure-data-studio if using rider database tool.
 https://learn.microsoft.com/en-us/ef/core/cli/dotnet
 
 dotnet tool install --global dotnet-ef  / dotnet tool update --global dotnet-ef
-
 dotnet add package Microsoft.EntityFrameworkCore.Design
 
 dotnet ef migrations add Outcome
-
 dotnet ef database update
+
+cd <<ProjectMap>>/src/
+dotnet ef migrations add <<MigrationName>>> --project CompetenceProfilingInfrastructure -s CanvasKpiLti -c DatabaseContext --verbose
+dotnet ef database update --project CompetenceProfilingInfrastructure -s CanvasKpiLti -c DatabaseContext --verbose
 
 # Caching
 // https://learn.microsoft.com/en-us/aspnet/core/performance/caching/distributed?view=aspnetcore-7.0
