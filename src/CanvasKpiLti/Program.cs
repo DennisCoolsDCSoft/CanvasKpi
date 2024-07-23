@@ -6,6 +6,7 @@ using CanvasIdentity.Extensions;
 using CanvasKpiLti.Services;
 using CompetenceProfilingDomain.Contracts;
 using CompetenceProfilingDomain.Domain;
+using CompetenceProfilingDomain.DomainCp;
 using CompetenceProfilingInfrastructure.CanvasDao;
 using CompetenceProfilingInfrastructure.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -154,5 +155,6 @@ public class Program
         builder.Services.AddTransient<CardCollection>();
         builder.Services.AddTransient<UserCollection>();
         builder.Services.AddTransient<AssignmentGroups>();
+        builder.Services.AddTransient<OutcomeResultCollection>();
     }
 }

@@ -1,4 +1,5 @@
 @using CanvasIdentity.Extensions
+@using CompetenceProfilingDomain.Definitions
 @using Microsoft.AspNetCore.Hosting;
 @using Microsoft.Extensions.Hosting;
 @inject IWebHostEnvironment Env
@@ -7,31 +8,33 @@
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
-
-    string[] activitiesHbo = { "Analysis", "Advise", "Design", "Realisation", "Manage&Control" };
-    string[] activitiesPo = { "FOO", "IPS", "PL", "TI", "" };
-
 }
 
 @functions {
 
-    void DoCard(string[] activities, string architecktuur)
+    void DoCard(ArchitectureHboEnum architecktuur)
     {
-        foreach (var activity in activities)
-        {  // een cell
+        foreach (CompetencesHboEnum activity in Enum.GetValues(typeof(CompetencesHboEnum)))
+        {
+            if (activity == CompetencesHboEnum.NotFound)
+            {
+                continue;
+            }
             <div class="card">
                 <div class="desc" data-arch="User-1">
-                    @foreach (var card in @Model.Cards.Where(w => w.Activitiet == activity && w.Architecktuur == architecktuur))
+                    @foreach (var card in @Model.Cards.Where(w => w.CompetenceHbo == activity && w.ArchitectureHbo == architecktuur))
                     {
+                        
                         var his = card.CourseHistory.Count > 0 ? "MasteredHistory" : "";
                         var dkpi = card.Points != null ? "data-kpi-point="+ card.Points : "";
-                        <div class="medal @his" @dkpi data-outcomeId="@card.OutcomeId" data-criteriaId="@card.Id">
-                            @card.Niveaus
+                        var txt = card.Description.Split('-')[1] ?? "";
+                        <div class="medal @his" @dkpi data-outcomeId="@card.OutcomeId" data-criteriaId="@card.CriteriaId">
+                            @txt
                             <p style="display: none;">
-                                @card.LongDescription
+                                 @Html.Raw(card.LongDescription)
                                 @if (Env.IsDevelopment())
                                 {
-                                    @card.DebugTxt
+                                    @* @card.DebugTxt *@
                                 }
                             </p>
                         </div>
@@ -94,7 +97,7 @@
                         <p style="display: none;">Effective professional development enables students to develop the knowledge and skills they need to address challenges.</p>
                     </div>
                 </div>
-                @{ DoCard(activitiesPo, "po"); }
+                @* @{ DoCard(activitiesPo, "po"); } *@
             </div>
 
             <br/>
@@ -125,7 +128,7 @@
                         User Interaction
                     </div>
                 </div>
-                @{ DoCard(activitiesHbo, "U"); }
+                @{ DoCard( ArchitectureHboEnum.U); }
             </div>
 
             <div class="flex-container">
@@ -136,7 +139,7 @@
                         Software
                     </div>
                 </div>
-                @{ DoCard(activitiesHbo, "S"); }
+               @{ DoCard(ArchitectureHboEnum.S); }
             </div>
 
             <div class="flex-container">
@@ -147,7 +150,7 @@
                         Hardware Interfacing
                     </div>
                 </div>
-                @{ DoCard(activitiesHbo, "H"); }
+               @{ DoCard(ArchitectureHboEnum.H); }
             </div>
 
             <div class="flex-container">
@@ -158,7 +161,7 @@
                         Infrastructure
                     </div>
                 </div>
-                @{ DoCard(activitiesHbo, "I"); }
+                 @{ DoCard(ArchitectureHboEnum.I); }
             </div>
 
             <div class="flex-container">
@@ -169,7 +172,7 @@
                         Organisational processes
                     </div>
                 </div>
-                @{ DoCard(activitiesHbo, "O"); }
+                @{ DoCard(ArchitectureHboEnum.O); }
             </div>
             <div style="padding: 20px; display: inline-block; float: right">
                 <input id="saveDown" type="button" value="Save" class="save btn btn-primary"/>

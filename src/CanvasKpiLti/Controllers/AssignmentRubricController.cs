@@ -5,6 +5,7 @@ using CanvasIdentity.Extensions;
 using CanvasKpiLti.Models;
 using CompetenceProfilingDomain.Contracts.ModelsCanvas;
 using CompetenceProfilingDomain.Domain;
+using CompetenceProfilingDomain.DomainCp;
 using Microsoft.AspNetCore.Mvc;
 using AssignmentGroups = CompetenceProfilingDomain.Domain.AssignmentGroups;
 
@@ -15,13 +16,15 @@ public class AssignmentRubricController : Controller
     private readonly CardCollection _cardCollection;
     private readonly UserCollection _userCollection;
     private readonly AssignmentGroups _assignmentGroups;
+    private readonly OutcomeResultCollection _outcomeResultCollection;
 
 
-    public AssignmentRubricController(CardCollection cardCollection, UserCollection userCollection, AssignmentGroups assignmentGroups)
+    public AssignmentRubricController(CardCollection cardCollection, UserCollection userCollection, AssignmentGroups assignmentGroups,OutcomeResultCollection outcomeResultCollection)
     {
         _cardCollection = cardCollection;
         _userCollection = userCollection;
         _assignmentGroups = assignmentGroups;
+        _outcomeResultCollection = outcomeResultCollection;
     }
 
     [HttpPost]
@@ -68,10 +71,10 @@ public class AssignmentRubricController : Controller
         }
         
         var assignmentId = _assignmentGroups.GetAssignmentIdInWeightGroup(User.CanvasClaims().CanvasCourseId);
-        var cards =_cardCollection.GetAllCards(User.CanvasClaims().CanvasCourseId, assignmentId, userId);
-        
+       var outcomeResults =
+           _outcomeResultCollection.GetAllCards(User.CanvasClaims().CanvasCourseId, assignmentId, userId);
         return View(
-            new AssignmentRubricViewModel(cards, studentsInCourse, userId, studentName,assignmentId)
+            new AssignmentRubricViewModel(outcomeResults, studentsInCourse, userId, studentName,assignmentId)
         );
     }
 }
