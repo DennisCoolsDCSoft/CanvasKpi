@@ -1,9 +1,12 @@
+using System.Diagnostics;
+using System.Globalization;
 using CompetenceProfilingDomain.Contracts;
 using CompetenceProfilingDomain.Contracts.ModelsCanvas;
 using CompetenceProfilingDomain.Contracts.ModelsDatabase;
 using CompetenceProfilingDomain.Definitions;
 using CompetenceProfilingDomain.Domain;
 using CompetenceProfilingDomain.Extensions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 
 namespace CompetenceProfilingDomain.DomainCp;
@@ -29,21 +32,25 @@ public class OutcomeResultCollection
 
     public List<OutcomeResult> GetAllCards(int courseId, int assignmentId, int userId)
     {
+        Debug.WriteLine($"GetAllCardsStart {DateTime.Now.ToString("h:mm:ss.fff")}");
         RubricAssociationId(assignmentId); // check rubric number
         var rubricCriteria = RubricCriteria(assignmentId);
         
+        //todo sql slow
         var submissionsCanvas = _assignmentRubricCriteriaRatingDao.SubmissionsByCourseAndAssignmentAndUser(courseId, assignmentId, userId);
-        var submissionsStudent = _repository.Query<StudentAdviceDto>().Where(w => w.CourseId == courseId & w.UserId == userId).ToList();
-        var studKpi = _repository.Query<StudentKpiDto>().Where(w => w.UserId == userId && w.CourseId != courseId).ToList();
+        var submissionsStudent = _repository.Query<StudentAdviceDto>()
+            .Where(w => w.CourseId == courseId & w.UserId == userId).ToList();
+        var studKpi = _repository.Query<StudentKpiDto>().Where(w => w.UserId == userId && w.CourseId != courseId && w.Point != null).ToList();
         var outcomes = _repository.Query<OutcomesCanvasDto>().ToList();
+        Debug.WriteLine($"GetAllCardsEnd sql {DateTime.Now.ToString("h:mm:ss.fff")}");
         
         var ret = new List<OutcomeResult>();
         foreach (var criteria in rubricCriteria)
         {
             var subCan = submissionsCanvas?.RubricAssessment.FirstOrDefault(f => f._id == criteria.Id);
             var subStud = submissionsStudent.FirstOrDefault(f=>f.CriteriaId== criteria.Id);
-            var outcome = outcomes.FirstOrDefault(f => f.LmsId == criteria.OutcomeCanvasDto.Id);
-
+            var outcome = outcomes.FirstOrDefault(f => f.LmsId == criteria.OutcomeCanvasDto.Id || f.CriteriaId == criteria.Id);
+            
             OutcomeResult card;
             if (outcome == null)
             {
@@ -74,6 +81,7 @@ public class OutcomeResultCollection
             
             ret.Add(card);
         }
+        Debug.WriteLine($"GetAllCardsEnd {DateTime.Now.ToString("h:mm:ss.fff")}");
         return ret;
     }
     

@@ -52,7 +52,7 @@ dotnet ef database update --project CompetenceProfilingInfrastructure -s CanvasK
 # Caching
 // https://learn.microsoft.com/en-us/aspnet/core/performance/caching/distributed?view=aspnetcore-7.0
 // https://dejanstojanovic.net/aspnet/2018/may/using-idistributedcache-in-net-core-just-got-a-lot-easier/
-dotnet sql-cache create "Server=127.0.0.1,1433;Database=kpiDb;User ID=sa;Password=MyPass@word;TrustServerCertificate=True;MultiSubnetFailover=True;MultipleActiveResultSets=true" dbo WebCache
+dotnet sql-cache create "Server=127.0.0.1,1433;Database=kpiCpDb;User ID=sa;Password=MyPass@word;TrustServerCertificate=True;MultiSubnetFailover=True;MultipleActiveResultSets=true" dbo WebCache
 
 dotnet sql-cache create "Server=(localdb)\MSSQLLocalDB;Database=kpiDb;TrustServerCertificate=True;MultiSubnetFailover=True;MultipleActiveResultSets=true" dbo WebCache
 

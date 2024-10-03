@@ -21,61 +21,61 @@ public class CardCollection
         _distributedCache = distributedCache;
     }
 
-    public List<Card> GetAllCards(int courseId, int assignmentId, int userId)
-    {
-        RubricAssociationId(assignmentId); // check rubric number
-        var rubricCriteria = RubricCriteria(assignmentId);
-        
-        var submissionsCanvas = _assignmentRubricCriteriaRatingDao.SubmissionsByCourseAndAssignmentAndUser(courseId, assignmentId, userId);
-        var submissionsStudent = _repository.Query<StudentAdviceDto>().Where(w => w.CourseId == courseId & w.UserId == userId).ToList();
-        //var studKpi = _databaseContext.StudentKpi.Where(w => w.UserId == userId && w.CourseId != courseId).ToList();
-        var studKpi = _repository.Query<StudentKpiDto>().Where(w => w.UserId == userId && w.CourseId != courseId).ToList();
-        
-        var ret = new List<Card>();
-        foreach (var criteria in rubricCriteria)
-        {
-            var subCan = submissionsCanvas?.RubricAssessment.FirstOrDefault(f => f._id == criteria.Id);
-            var subStud = submissionsStudent.FirstOrDefault(f=>f.CriteriaId== criteria.Id);
+    // public List<Card> GetAllCards(int courseId, int assignmentId, int userId)
+    // {
+    //     RubricAssociationId(assignmentId); // check rubric number
+    //     var rubricCriteria = RubricCriteria(assignmentId);
+    //     
+    //     var submissionsCanvas = _assignmentRubricCriteriaRatingDao.SubmissionsByCourseAndAssignmentAndUser(courseId, assignmentId, userId);
+    //     var submissionsStudent = _repository.Query<StudentAdviceDto>().Where(w => w.CourseId == courseId & w.UserId == userId).ToList();
+    //     //var studKpi = _databaseContext.StudentKpi.Where(w => w.UserId == userId && w.CourseId != courseId).ToList();
+    //     var studKpi = _repository.Query<StudentKpiDto>().Where(w => w.UserId == userId && w.CourseId != courseId).ToList();
+    //     
+    //     var ret = new List<Card>();
+    //     foreach (var criteria in rubricCriteria)
+    //     {
+    //         var subCan = submissionsCanvas?.RubricAssessment.FirstOrDefault(f => f._id == criteria.Id);
+    //         var subStud = submissionsStudent.FirstOrDefault(f=>f.CriteriaId== criteria.Id);
+    //
+    //         var card = new Card(criteria.Id, criteria.OutcomeCanvasDto.Id, criteria.Description, criteria.LongDescription);
+    //         
+    //         if(subStud!= null) // stud advises geel
+    //         {
+    //             if(subStud.Point== (int)PointScale.StudentAdvice)
+    //                 card.Points = subStud.Point;
+    //         }
+    //
+    //         if (subCan?.Points is "3" or "4" or "5")  // canvas scale
+    //         {
+    //             card.Points = (int)PointScale.Mastered;
+    //         }
+    //
+    //         card.CourseHistory = studKpi.Where(w 
+    //             => w.OutcomeId == criteria.OutcomeCanvasDto.Id && w.Point == (int)PointScale.Mastered
+    //             || w.CriteriaId == criteria.Id && w.Point==(int)PointScale.Mastered
+    //             
+    //             ).Select(s=>s.CourseId).ToList();
+    //         
+    //         ret.Add(card);
+    //     }
+    //     return ret;
+    // }
 
-            var card = new Card(criteria.Id, criteria.OutcomeCanvasDto.Id, criteria.Description, criteria.LongDescription);
-            
-            if(subStud!= null) // stud advises geel
-            {
-                if(subStud.Point== (int)PointScale.StudentAdvice)
-                    card.Points = subStud.Point;
-            }
-
-            if (subCan?.Points is "3" or "4" or "5")  // canvas scale
-            {
-                card.Points = (int)PointScale.Mastered;
-            }
-
-            card.CourseHistory = studKpi.Where(w 
-                => w.OutcomeId == criteria.OutcomeCanvasDto.Id && w.Point == (int)PointScale.Mastered
-                || w.CriteriaId == criteria.Id && w.Point==(int)PointScale.Mastered
-                
-                ).Select(s=>s.CourseId).ToList();
-            
-            ret.Add(card);
-        }
-        return ret;
-    }
-
-    private List<CriterionCanvasDto> RubricCriteria(int assignmentId)
-    {
-        var buff = _distributedCache.GetDistributedCache<List<CriterionCanvasDto>>("ListCriterion" + assignmentId);
-        if (buff != null)
-        {
-            return buff;
-        }
-        
-        var data = _assignmentRubricDao.RubricAssignment(assignmentId);
-        var rubricCriteria = data.Assignment?.RubricCanvasDto.Criteria;
-        if (rubricCriteria == null) throw new Exception("Rubric Criteria not found");
-        
-        _distributedCache.SetDistributedCache("ListCriterion" + assignmentId,rubricCriteria,15);
-        return rubricCriteria;
-    }
+    // private List<CriterionCanvasDto> RubricCriteria(int assignmentId)
+    // {
+    //     var buff = _distributedCache.GetDistributedCache<List<CriterionCanvasDto>>("ListCriterion" + assignmentId);
+    //     if (buff != null)
+    //     {
+    //         return buff;
+    //     }
+    //     
+    //     var data = _assignmentRubricDao.RubricAssignment(assignmentId);
+    //     var rubricCriteria = data.Assignment?.RubricCanvasDto.Criteria;
+    //     if (rubricCriteria == null) throw new Exception("Rubric Criteria not found");
+    //     
+    //     _distributedCache.SetDistributedCache("ListCriterion" + assignmentId,rubricCriteria,15);
+    //     return rubricCriteria;
+    // }
 
 
     public void UpdateCards(int courseId,int userId,int assignmentId, IReadOnlyList<PointViewModel> points, bool isTeacherRole = false)

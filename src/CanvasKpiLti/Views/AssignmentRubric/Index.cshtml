@@ -8,30 +8,36 @@
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
+    
+    bool pl = Model.Cards.Any(a => a.CompetenceHbo == CompetencesHboEnum.Pl);
 }
 
 @functions {
 
     void DoCard(ArchitectureHboEnum architecktuur)
     {
+        int count = 0;
         foreach (CompetencesHboEnum activity in Enum.GetValues(typeof(CompetencesHboEnum)))
         {
-            if (activity == CompetencesHboEnum.NotFound)
+            
+            if (activity == CompetencesHboEnum.NotFound 
+                || !Model.Cards.Any(w => w.CompetenceHbo == activity && w.ArchitectureHbo == architecktuur))
             {
                 continue;
             }
+            
             <div class="card">
                 <div class="desc" data-arch="User-1">
-                    @foreach (var card in @Model.Cards.Where(w => w.CompetenceHbo == activity && w.ArchitectureHbo == architecktuur))
+                    @foreach (var card in Model.Cards.Where(w => w.CompetenceHbo == activity && w.ArchitectureHbo == architecktuur))
                     {
                         
                         var his = card.CourseHistory.Count > 0 ? "MasteredHistory" : "";
                         var dkpi = card.Points != null ? "data-kpi-point="+ card.Points : "";
-                        var txt = card.Description.Split('-')[1] ?? "";
+                        var txt = card.Description; //.Split('-')[1] ?? "";
                         <div class="medal @his" @dkpi data-outcomeId="@card.OutcomeId" data-criteriaId="@card.CriteriaId">
                             @txt
                             <p style="display: none;">
-                                 @Html.Raw(card.LongDescription)
+                                @Html.Raw(card.LongDescription)
                                 @if (Env.IsDevelopment())
                                 {
                                     @* @card.DebugTxt *@
@@ -41,6 +47,14 @@
                     }
                 </div>
             </div>
+            count++;
+        }
+
+        while (count<5)
+        {
+            <div class="card">
+            </div>
+            count++;
         }
     }
 
@@ -62,32 +76,60 @@
             </div>
             
             <br/>
-            <div class="flex-container">
-                <div class="card">
-                </div>
-                <div class="card">
-                    <div class="medal-bot">
-                        Future-Oriented Organisation
+            @if (!pl)
+            {
+                <div class="flex-container">
+                    <div class="card">
+                    </div>
+                    <div class="card">
+                        <div class="medal-bot">
+                            Future-Oriented Organisation
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="medal-bot">
+                            Investigative Problem Solving
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="medal-bot">
+                            Personal Leadership
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="medal-bot">
+                            Targeted Interaction
+                        </div>
+                    </div>
+                    <div class="card">
                     </div>
                 </div>
-                <div class="card">
-                    <div class="medal-bot">
-                        Investigative Problem Solving
+            }
+            @if (pl)
+            {
+                <div class="flex-container">
+                    <div class="card">
+                    </div>
+                    <div class="card">
+                        <div class="medal-bot">
+                            Professional standard
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="medal-bot">
+                            Personal leadership
+                        </div>
+                    </div>
+                    <div class="card">
+                        
+                    </div>
+                    <div class="card">
+                        
+                    </div>
+                    <div class="card">
                     </div>
                 </div>
-                <div class="card">
-                    <div class="medal-bot">
-                        Personal Leadership
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="medal-bot">
-                        Targeted Interaction
-                    </div>
-                </div>
-                <div class="card">
-                </div>
-            </div>
+            }
 
             <div class="flex-container">
                 <div class="card PO">
@@ -97,7 +139,7 @@
                         <p style="display: none;">Effective professional development enables students to develop the knowledge and skills they need to address challenges.</p>
                     </div>
                 </div>
-                @* @{ DoCard(activitiesPo, "po"); } *@
+                @{ DoCard( ArchitectureHboEnum.Po); }
             </div>
 
             <br/>

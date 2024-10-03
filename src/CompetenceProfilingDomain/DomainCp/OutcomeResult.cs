@@ -18,7 +18,7 @@ public class OutcomeResult
 
     }
 
-    public ArchitectureHboEnum ArchitectureHbo { get; private set; }
+    public ArchitectureHboEnum ArchitectureHbo { get; }
     public CompetencesHboEnum CompetenceHbo { get; private set; }
     public LevelsEnum Level { get; private set; }
     public int LevelDivisorNumber { get; private set; }

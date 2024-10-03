@@ -18,7 +18,8 @@ Matrix --> "*" Architecture
 
 Architecture --> "*" Competences
 Competences  --> "1" Cell
-Cell --> "*" OutcomeGroup
+Cell --> "*" OutcomeTree
+OutcomeTree --> "4 levels" OutcomeGroup
 OutcomeGroup --> "*" OutcomeResult
 OutcomeResult "1"<-- OutcomeResultCollection
 OutcomeResultCollection --> "1" AssignmentRubric
