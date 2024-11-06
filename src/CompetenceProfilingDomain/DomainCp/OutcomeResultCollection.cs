@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using CompetenceProfilingDomain.Contracts;
+using CompetenceProfilingDomain.Contracts.Infrastructure;
 using CompetenceProfilingDomain.Contracts.ModelsCanvas;
 using CompetenceProfilingDomain.Contracts.ModelsDatabase;
 using CompetenceProfilingDomain.Definitions;
@@ -11,7 +12,7 @@ using Microsoft.Extensions.Caching.Distributed;
 
 namespace CompetenceProfilingDomain.DomainCp;
 
-public class OutcomeResultCollection
+public class OutcomeResultCollection : IOutcomeResultCollection
 {
     private readonly IAssignmentRubricCriteriaRatingDao _assignmentRubricCriteriaRatingDao;
     private readonly IRepository _repository;
@@ -30,6 +31,9 @@ public class OutcomeResultCollection
     }
     
 
+    // outcomes van beordelings rubric (donker groen als ingevuld en geel in deze course)
+    // outcomes van history => beordeling van zelfde outcome ID in ander course in table StudentKpi en 
+    
     public List<OutcomeResult> GetAllCards(int courseId, int assignmentId, int userId)
     {
         Debug.WriteLine($"GetAllCardsStart {DateTime.Now.ToString("h:mm:ss.fff")}");
@@ -44,6 +48,7 @@ public class OutcomeResultCollection
         var outcomes = _repository.Query<OutcomesCanvasDto>().ToList();
         Debug.WriteLine($"GetAllCardsEnd sql {DateTime.Now.ToString("h:mm:ss.fff")}");
         
+        // rubric course 
         var ret = new List<OutcomeResult>();
         foreach (var criteria in rubricCriteria)
         {
@@ -65,12 +70,12 @@ public class OutcomeResultCollection
             if(subStud!= null) // stud advises geel
             {
                 if(subStud.Point== (int)PointScale.StudentAdvice)
-                    card.Points = subStud.Point;
+                    card.Points = (PointScale?)subStud.Point;
             }
 
             if (subCan?.Points is "3" or "4" or "5")  // canvas scale
             {
-                card.Points = (int)PointScale.Mastered;
+                card.Points = PointScale.Mastered;
             }
 
             card.CourseHistory = studKpi.Where(w 
@@ -81,6 +86,15 @@ public class OutcomeResultCollection
             
             ret.Add(card);
         }
+        
+        // start add outcome history
+        // submissionsStudent => zoek hier de OutcomesCanvasDto bij op outcomeId(LmsId) en CriteriaId
+
+        // var cardhist = new OutcomeResult("1", "1", "desciption", "LD", ArchitectureHboEnum.U, CompetencesHboEnum.An,
+        //     LevelsEnum.L1,0);
+        // cardhist.Points = PointScale.Mastered;
+        // ret.Add(cardhist);
+        
         Debug.WriteLine($"GetAllCardsEnd {DateTime.Now.ToString("h:mm:ss.fff")}");
         return ret;
     }

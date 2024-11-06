@@ -26,6 +26,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompetenceProfilingInfrastr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompetenceProfilingDomain", "src\CompetenceProfilingDomain\CompetenceProfilingDomain.csproj", "{A4398F0D-55D6-484B-AB4F-27B75AC66901}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{420B8610-8AA4-44A1-8D19-EF395FE99AF0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompetenceProfilingDomainTests", "test\CompetenceProfilingDomainTests\CompetenceProfilingDomainTests.csproj", "{E1CED66B-53DC-4811-8E7F-09B4714BB728}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,11 +56,19 @@ Global
 		{A4398F0D-55D6-484B-AB4F-27B75AC66901}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4398F0D-55D6-484B-AB4F-27B75AC66901}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4398F0D-55D6-484B-AB4F-27B75AC66901}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1CED66B-53DC-4811-8E7F-09B4714BB728}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1CED66B-53DC-4811-8E7F-09B4714BB728}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1CED66B-53DC-4811-8E7F-09B4714BB728}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1CED66B-53DC-4811-8E7F-09B4714BB728}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB8D1A81-CDB7-4DF7-AE4D-2E7396823857}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CC77F558-CC2D-4C38-B55D-26E04A85AB99} = {420B8610-8AA4-44A1-8D19-EF395FE99AF0}
+		{E1CED66B-53DC-4811-8E7F-09B4714BB728} = {420B8610-8AA4-44A1-8D19-EF395FE99AF0}
 	EndGlobalSection
 EndGlobal

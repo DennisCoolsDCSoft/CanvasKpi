@@ -1,6 +1,8 @@
 using CompetenceProfilingDomain.Contracts;
+using CompetenceProfilingDomain.Contracts.Infrastructure;
 using CompetenceProfilingDomain.Contracts.ModelsCanvas;
 using CompetenceProfilingDomain.Contracts.ModelsDatabase;
+using CompetenceProfilingDomain.Definitions;
 using CompetenceProfilingDomain.Extensions;
 using Microsoft.Extensions.Caching.Distributed;
 

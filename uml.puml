@@ -5,7 +5,7 @@ class Matrix {
    Getall()
 }
 
-class Cell{
+class CompetencesCell{
 MaxLevel : level
 }
 
@@ -16,10 +16,8 @@ Level:Level
 
 Matrix --> "*" Architecture
 
-Architecture --> "*" Competences
-Competences  --> "1" Cell
-Cell --> "*" OutcomeTree
-OutcomeTree --> "4 levels" OutcomeGroup
+Architecture --> "*" CompetencesCell
+CompetencesCell  --> "4 levels" OutcomeGroup
 OutcomeGroup --> "*" OutcomeResult
 OutcomeResult "1"<-- OutcomeResultCollection
 OutcomeResultCollection --> "1" AssignmentRubric

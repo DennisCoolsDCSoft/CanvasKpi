@@ -1,4 +1,4 @@
-namespace CompetenceProfilingDomain.Contracts;
+namespace CompetenceProfilingDomain.Contracts.Infrastructure;
 
 public interface ICanvasGraphQlHttpClient
 {

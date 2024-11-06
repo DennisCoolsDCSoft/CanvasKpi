@@ -7,7 +7,7 @@ namespace CanvasKpiLti.Models;
 
 public class AssignmentRubricViewModel
 {
-    public AssignmentRubricViewModel(IReadOnlyList<OutcomeResult> cards, IReadOnlyList<UserCanvasDto> users, int userId, string studentName,
+    public AssignmentRubricViewModel(IReadOnlyList<OutcomeResultViewModel> cards, IReadOnlyList<UserCanvasDto> users, int userId, string studentName,
         int assignmentId)
     {
         StudentName = studentName;
@@ -16,7 +16,7 @@ public class AssignmentRubricViewModel
         Students = users;
         UserId = userId;
     }
-    public IReadOnlyList<OutcomeResult> Cards { get;}
+    public IReadOnlyList<OutcomeResultViewModel> Cards { get;}
     public IReadOnlyList<UserCanvasDto> Students { get; }
     public int UserId { get; }
 

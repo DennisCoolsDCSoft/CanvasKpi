@@ -1,6 +1,6 @@
 using CompetenceProfilingDomain.Contracts.ModelsCanvas;
 
-namespace CompetenceProfilingDomain.Contracts;
+namespace CompetenceProfilingDomain.Contracts.Infrastructure;
 
 public interface IAssignmentGroupsDao
 {

@@ -5,6 +5,7 @@ using CanvasIdentity.Exceptions;
 using CanvasIdentity.Extensions;
 using CanvasKpiLti.Services;
 using CompetenceProfilingDomain.Contracts;
+using CompetenceProfilingDomain.Contracts.Infrastructure;
 using CompetenceProfilingDomain.Domain;
 using CompetenceProfilingDomain.DomainCp;
 using CompetenceProfilingInfrastructure.CanvasDao;
@@ -155,6 +156,7 @@ public class Program
         builder.Services.AddTransient<CardCollection>();
         builder.Services.AddTransient<UserCollection>();
         builder.Services.AddTransient<AssignmentGroups>();
-        builder.Services.AddTransient<OutcomeResultCollection>();
+        builder.Services.AddTransient<IOutcomeResultCollection,OutcomeResultCollection>();
+        builder.Services.AddTransient<Matrix>();
     }
 }

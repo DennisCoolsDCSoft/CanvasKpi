@@ -32,7 +32,7 @@
                     {
                         
                         var his = card.CourseHistory.Count > 0 ? "MasteredHistory" : "";
-                        var dkpi = card.Points != null ? "data-kpi-point="+ card.Points : "";
+                        var dkpi = card.Points != null ? "data-kpi-point="+ (int)card.Points : "";
                         var txt = card.Description; //.Split('-')[1] ?? "";
                         <div class="medal @his" @dkpi data-outcomeId="@card.OutcomeId" data-criteriaId="@card.CriteriaId">
                             @txt

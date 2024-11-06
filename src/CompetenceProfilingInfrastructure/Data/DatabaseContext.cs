@@ -2,6 +2,7 @@
 
 using System.Runtime.CompilerServices;
 using CompetenceProfilingDomain.Contracts;
+using CompetenceProfilingDomain.Contracts.Infrastructure;
 using CompetenceProfilingDomain.Contracts.ModelsDatabase;
 using Microsoft.EntityFrameworkCore;
 
