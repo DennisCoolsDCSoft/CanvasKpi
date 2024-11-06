@@ -54,7 +54,7 @@ function open_kpi_arch(div){
 
 function config_teacher()
 {
-    const medal = document.querySelectorAll('.medal');
+    const medal = document.querySelectorAll('.isEditable');
     medal.forEach(med =>
         med.addEventListener("click", function() {
             const medKPI = med.getAttribute('data-kpi-point');
@@ -77,7 +77,7 @@ function config_teacher()
 
 function config_student()
 {
-    const medal = document.querySelectorAll('.medal');
+    const medal = document.querySelectorAll('.isEditable');
     medal.forEach(med =>
         med.addEventListener("click", function() {
             const medKPI = med.getAttribute('data-kpi-point');

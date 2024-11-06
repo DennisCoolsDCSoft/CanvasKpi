@@ -89,6 +89,7 @@ public class AssignmentRubricController : Controller
             {
                 foreach (var outcomeGroup in competenceCell.OutcomeGroups)
                 {
+                    var masteredOutcomeGroup = outcomeGroup.MasteredOutcomeGroup;
                     foreach (var outcomeResult in outcomeGroup.OutcomeResults)
                     {
                         outcomeResultsViewModels.Add(new OutcomeResultViewModel
@@ -101,11 +102,14 @@ public class AssignmentRubricController : Controller
                             Description = 
                                 outcomeResult.Description.IndexOf('-') < 3 ? 
                                     outcomeResult.Description : outcomeResult.Description.Split('-')[1],
-                            CourseHistory = outcomeResult.CourseHistory,
+                            
+                            CourseHistory = CourseHistoryComb( outcomeResult.CourseHistory, masteredOutcomeGroup),
+                            
                             CriteriaId = outcomeResult.CriteriaId,
                             LongDescription = outcomeResult.LongDescription,
                             OutcomeId = outcomeResult.OutcomeId,
                             LevelDivisorNumber = outcomeResult.LevelDivisorNumber,
+                            IsEditable = outcomeResult.IsEditable
                         });
                     }
                 }
@@ -116,6 +120,17 @@ public class AssignmentRubricController : Controller
         return View(
             new AssignmentRubricViewModel(outcomeResultsViewModels, studentsInCourse, userId, studentName, assignmentId)
         );
+    }
+
+    private List<int> CourseHistoryComb(List<int> outcomeResultCourseHistory, bool masteredOutcomeGroup)
+    {
+       List<int> resultCourseHistory = new List<int>();
+
+       if (masteredOutcomeGroup)
+       {
+           resultCourseHistory.Add(1);
+       }
+       return resultCourseHistory;
     }
 
     // private string FormatDescription(string outcomeResultDescription)

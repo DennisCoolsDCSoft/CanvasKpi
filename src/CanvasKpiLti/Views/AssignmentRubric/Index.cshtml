@@ -32,9 +32,10 @@
                     {
                         
                         var his = card.CourseHistory.Count > 0 ? "MasteredHistory" : "";
-                        var dkpi = card.Points != null ? "data-kpi-point="+ (int)card.Points : "";
+                        var iseditable = card.IsEditable ? "isEditable" : "isNotEditable";
+                        var dkpi = card.Points != null &&  card.IsEditable ? "data-kpi-point="+ (int)card.Points : "";
                         var txt = card.Description; //.Split('-')[1] ?? "";
-                        <div class="medal @his" @dkpi data-outcomeId="@card.OutcomeId" data-criteriaId="@card.CriteriaId">
+                        <div class="medal @his @iseditable" @dkpi data-outcomeId="@card.OutcomeId" data-criteriaId="@card.CriteriaId">
                             @txt
                             <p style="display: none;">
                                 @Html.Raw(card.LongDescription)
@@ -289,6 +290,7 @@
             config(); 
 
             $(".save").prop("disabled",true)
+            $('.isNotEditable').hide()
             .click(function(){
             
                 let send={};
@@ -296,7 +298,7 @@
                 send.userId = userId;
                 send.points=[];
                     
-                const medal = document.querySelectorAll('.medal');
+                const medal = document.querySelectorAll('.isEditable');
                 medal.forEach(function(med)
                  {
                      let criterionIdOutcomeIdAndPoint={};

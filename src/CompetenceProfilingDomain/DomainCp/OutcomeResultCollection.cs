@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using CompetenceProfilingDomain.Contracts;
 using CompetenceProfilingDomain.Contracts.Infrastructure;
@@ -60,10 +61,12 @@ public class OutcomeResultCollection : IOutcomeResultCollection
             if (outcome == null)
             {
                 card = new OutcomeResult(criteria.Id, criteria.OutcomeCanvasDto.Id, criteria.Description, criteria.LongDescription,ArchitectureHboEnum.NotFound,CompetencesHboEnum.NotFound,LevelsEnum.NotFound,0);
+                card.IsEditable = false;
             }
             else
             {
                 card = new OutcomeResult(criteria.Id, criteria.OutcomeCanvasDto.Id, criteria.Description, criteria.LongDescription,outcome.Architecture,outcome.Competence,outcome.Level,outcome.LevelDivisorNumber);
+                card.IsEditable = true;
             }
             
             
@@ -78,22 +81,49 @@ public class OutcomeResultCollection : IOutcomeResultCollection
                 card.Points = PointScale.Mastered;
             }
 
-            card.CourseHistory = studKpi.Where(w 
-                => w.OutcomeId == criteria.OutcomeCanvasDto.Id && w.Point == (int)PointScale.Mastered
-                   || w.CriteriaId == criteria.Id && w.Point==(int)PointScale.Mastered
-                
-            ).Select(s=>s.CourseId).ToList();
+            // card.CourseHistory = studKpi.Where(w 
+            //     => w.OutcomeId == criteria.OutcomeCanvasDto.Id && w.Point == (int)PointScale.Mastered
+            //        || w.CriteriaId == criteria.Id && w.Point==(int)PointScale.Mastered
+            //     
+            // ).Select(s=>s.CourseId).ToList();
             
             ret.Add(card);
         }
         
-        // start add outcome history
-        // submissionsStudent => zoek hier de OutcomesCanvasDto bij op outcomeId(LmsId) en CriteriaId
+        
+        //add history
+        var studKpihis = _repository.Query<StudentKpiDto>().Where(w => w.UserId == userId && w.CourseId != courseId).ToList();
 
-        // var cardhist = new OutcomeResult("1", "1", "desciption", "LD", ArchitectureHboEnum.U, CompetencesHboEnum.An,
-        //     LevelsEnum.L1,0);
-        // cardhist.Points = PointScale.Mastered;
-        // ret.Add(cardhist);
+        var disstudhis = new List<StudentKpiDto>();
+
+        foreach (var stud in studKpihis.Where(w => w.Point != null))
+        {
+            disstudhis.Add(stud);
+        }
+
+        foreach (var studk in studKpihis)
+        {
+            if (disstudhis.All(a => a.OutcomeId != studk.OutcomeId))
+            {
+                if(ret.All(a => a.OutcomeId != studk.OutcomeId))
+                    disstudhis.Add(studk);
+            }
+        }
+        
+        foreach (var studhis in disstudhis)
+        {
+            var outcome =
+                outcomes.FirstOrDefault(f => f.LmsId == studhis.OutcomeId || f.CriteriaId == studhis.CriteriaId);
+            if (outcome!= null)
+            {
+                var cardhist = new OutcomeResult(studhis.CriteriaId, studhis.OutcomeId, outcome.Title, $"_{studhis.CourseId}_{studhis.Point}", outcome.Architecture, outcome.Competence,outcome.Level,outcome.LevelDivisorNumber);
+                cardhist.IsEditable = false;
+                cardhist.Points = (PointScale?)studhis.Point;
+                if(studhis.Point !=null) cardhist.CourseHistory.Add(studhis.CourseId);
+                ret.Add(cardhist);
+            }
+        }
+        
         
         Debug.WriteLine($"GetAllCardsEnd {DateTime.Now.ToString("h:mm:ss.fff")}");
         return ret;

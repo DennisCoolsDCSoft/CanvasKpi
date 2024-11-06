@@ -15,4 +15,5 @@ public class OutcomeResultViewModel
     public string CriteriaId { get; set; } 
     public string OutcomeId { get; set; }
     public List<int> CourseHistory { get; set; } = new();
+    public bool IsEditable { get; set; }
 }

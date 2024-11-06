@@ -162,3 +162,7 @@ ul a{
   visibility: hidden;
   opacity: 1;
 }
+
+.isNotEditable{
+  background-color:rgba(73, 80, 87, 0.15)
+}

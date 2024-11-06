@@ -36,6 +36,7 @@ public class OutcomeResult
     
     //ToDo ?CourseHistory?
     public List<int> CourseHistory { get; set; } = new();
+    public bool IsEditable { set; get; } = false;
 
     // is edit?
 }
