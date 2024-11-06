@@ -92,6 +92,8 @@ public class AssignmentRubricController : Controller
                     var masteredOutcomeGroup = outcomeGroup.MasteredOutcomeGroup;
                     foreach (var outcomeResult in outcomeGroup.OutcomeResults)
                     {
+                        if(outcomeResult.IsEditable == true)
+                        //if(true)
                         outcomeResultsViewModels.Add(new OutcomeResultViewModel
                         {
                             ArchitectureHbo = architecture.ArchitectureHbo,
@@ -102,9 +104,7 @@ public class AssignmentRubricController : Controller
                             Description = 
                                 outcomeResult.Description.IndexOf('-') < 3 ? 
                                     outcomeResult.Description : outcomeResult.Description.Split('-')[1],
-                            
                             CourseHistory = CourseHistoryComb( outcomeResult.CourseHistory, masteredOutcomeGroup),
-                            
                             CriteriaId = outcomeResult.CriteriaId,
                             LongDescription = outcomeResult.LongDescription,
                             OutcomeId = outcomeResult.OutcomeId,
