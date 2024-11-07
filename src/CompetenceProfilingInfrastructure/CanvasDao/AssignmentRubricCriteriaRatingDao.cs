@@ -1,5 +1,4 @@
 using System.Net;
-using CompetenceProfilingDomain.Contracts;
 using CompetenceProfilingDomain.Contracts.Infrastructure;
 using CompetenceProfilingDomain.Contracts.ModelsCanvas;
 using Newtonsoft.Json;

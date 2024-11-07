@@ -1,5 +1,3 @@
-
-using CompetenceProfilingDomain.Contracts;
 using CompetenceProfilingDomain.Contracts.Infrastructure;
 using CompetenceProfilingDomain.Contracts.ModelsCanvas;
 using GraphQL;
@@ -17,6 +15,32 @@ public class AssignmentGroupsDao : IAssignmentGroupsDao
         _client = canvasGraphQlHttpClient.HttpClient;
     }
 
+    /// <summary>
+    /// https://xxx.instructure.com/graphiql
+    /// query GetAssignmentGroups() {
+    /// course(id: 12842 ) {
+    ///     assignmentGroupsConnection(first: 100, last: 100) {
+    ///         edges {
+    ///                 cursor
+    ///                 node {
+    ///                     name
+    ///                         groupWeight
+    ///                     state
+    ///                     assignmentsConnection {
+    ///                         nodes {
+    ///                             name
+    ///                                 _id
+    ///                         }
+    ///                     }
+    ///                 }
+    ///             }
+    ///         }
+    ///     }
+    /// }
+    /// </summary>
+    /// <param name="courseId"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"></exception>
     public AssignmentGroupsConnectionCanvasDto GetAssignmentGroupsByCourseId(int courseId)
     {
         using var graphQlClient =

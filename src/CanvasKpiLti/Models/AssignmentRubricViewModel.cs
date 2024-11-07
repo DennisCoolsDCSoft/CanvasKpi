@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using CompetenceProfilingDomain.Contracts.ModelsCanvas;
-using CompetenceProfilingDomain.Domain;
-using CompetenceProfilingDomain.DomainCp;
 
 namespace CanvasKpiLti.Models;
 

@@ -1,5 +1,4 @@
 using System.Text;
-using CompetenceProfilingDomain.Contracts;
 using CompetenceProfilingDomain.Contracts.Infrastructure;
 using Microsoft.Extensions.Caching.Distributed;
 

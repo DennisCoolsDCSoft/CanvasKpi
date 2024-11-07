@@ -1,8 +1,4 @@
-﻿
-
-using System.Runtime.CompilerServices;
-using CompetenceProfilingDomain.Contracts;
-using CompetenceProfilingDomain.Contracts.Infrastructure;
+﻿using CompetenceProfilingDomain.Contracts.Infrastructure;
 using CompetenceProfilingDomain.Contracts.ModelsDatabase;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +11,9 @@ namespace CompetenceProfilingInfrastructure.Data
         public DatabaseContext(DbContextOptions<DatabaseContext> options)
             : base(options)
         {
+#if DEBUG
             base.Database.Migrate();
+#endif
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

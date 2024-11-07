@@ -1,6 +1,5 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
-using CompetenceProfilingDomain.Contracts;
 using CompetenceProfilingDomain.Contracts.Infrastructure;
 
 namespace CanvasKpiLti.Services;

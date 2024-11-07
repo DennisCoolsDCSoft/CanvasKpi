@@ -33,7 +33,7 @@ public class OutcomeGroup
         }
     
         var nr = checkList.Count / 2.00;
-        var countTrue = checkList.Count(w => w.Item2);
+        var countTrue = checkList.Count(w => w.Item2 == true);
         var ret = nr <= countTrue;
         return ret;
     }

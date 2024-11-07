@@ -1,8 +1,3 @@
-using System;
-using System.Threading;
-using CanvasKpi.Models;
-using CompetenceProfilingDomain.Domain;
-using Xunit;
 using Xunit.Abstractions;
 
 namespace CanvasKpiLtiTests;

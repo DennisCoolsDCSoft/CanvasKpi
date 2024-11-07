@@ -4,7 +4,6 @@ using System.Net.Http.Headers;
 using CanvasIdentity.Exceptions;
 using CanvasIdentity.Extensions;
 using CanvasKpiLti.Services;
-using CompetenceProfilingDomain.Contracts;
 using CompetenceProfilingDomain.Contracts.Infrastructure;
 using CompetenceProfilingDomain.Domain;
 using CompetenceProfilingDomain.DomainCp;

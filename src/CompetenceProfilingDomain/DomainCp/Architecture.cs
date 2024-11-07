@@ -13,7 +13,7 @@ public class Architecture
     public Architecture (ArchitectureHboEnum architectureHboEnum, IReadOnlyList<OutcomeResult> outcomeResults)
     {
         ArchitectureHbo = architectureHboEnum;
-        // CompetencesHboEnum
+        
         foreach (CompetencesHboEnum c in Enum.GetValues(typeof(CompetencesHboEnum)))
         {
             var rest = outcomeResults.Where(w => w.CompetenceHbo == c).ToList();

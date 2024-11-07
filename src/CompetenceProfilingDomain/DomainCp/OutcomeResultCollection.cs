@@ -1,14 +1,8 @@
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using CompetenceProfilingDomain.Contracts;
 using CompetenceProfilingDomain.Contracts.Infrastructure;
 using CompetenceProfilingDomain.Contracts.ModelsCanvas;
 using CompetenceProfilingDomain.Contracts.ModelsDatabase;
 using CompetenceProfilingDomain.Definitions;
-using CompetenceProfilingDomain.Domain;
 using CompetenceProfilingDomain.Extensions;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 
 namespace CompetenceProfilingDomain.DomainCp;
@@ -19,10 +13,7 @@ public class OutcomeResultCollection : IOutcomeResultCollection
     private readonly IRepository _repository;
     private readonly IDistributedCache _distributedCache;
     private readonly IAssignmentRubricDao _assignmentRubricDao;
-
-    // add outcomes from assessment rubric + results in course   (edit = true)
-    // add outcomes from history database (readonly edit = false)
-
+    
     public OutcomeResultCollection(IAssignmentRubricCriteriaRatingDao assignmentRubricCriteriaRatingDao, IRepository repository,IDistributedCache distributedCache,IAssignmentRubricDao assignmentRubricDao)
     {
         _assignmentRubricCriteriaRatingDao = assignmentRubricCriteriaRatingDao;
@@ -31,23 +22,39 @@ public class OutcomeResultCollection : IOutcomeResultCollection
         _assignmentRubricDao = assignmentRubricDao;
     }
     
+    /// <summary>
+    /// Debugging and exporting data byHand
+    /// --20360,"IPS 2.1","<p><span>• You determine the direction ...</span></p>",50,25,2,1,35984_4978
+    /// </summary>
+    /// <param name="assignmentId"></param>
+    /// <returns></returns>
+    public string PrintCriterionForDatabaseTableOutcomeCanvas(int assignmentId)
+    {
+        var rubricCriteria = RubricCriteria(assignmentId);
 
-    // outcomes van beordelings rubric (donker groen als ingevuld en geel in deze course)
-    // outcomes van history => beordeling van zelfde outcome ID in ander course in table StudentKpi en 
+        string buff="";
+        foreach (var r in rubricCriteria.Where(d=>d.Description.StartsWith("TI")))
+        {
+            buff = buff +'\n' + $"--{r.OutcomeCanvasDto.Id},\"{r.Description}\",\"{r.LongDescription}\",0,0,0,0,{r.Id}";
+        }
+
+        return buff;
+    }
     
     public List<OutcomeResult> GetAllCards(int courseId, int assignmentId, int userId)
     {
-        Debug.WriteLine($"GetAllCardsStart {DateTime.Now.ToString("h:mm:ss.fff")}");
+        //ToDo Slow
+        //Debug.WriteLine($"GetAllCardsStart {DateTime.Now.ToString("h:mm:ss.fff")}");
         RubricAssociationId(assignmentId); // check rubric number
+        
         var rubricCriteria = RubricCriteria(assignmentId);
         
-        //todo sql slow
         var submissionsCanvas = _assignmentRubricCriteriaRatingDao.SubmissionsByCourseAndAssignmentAndUser(courseId, assignmentId, userId);
         var submissionsStudent = _repository.Query<StudentAdviceDto>()
             .Where(w => w.CourseId == courseId & w.UserId == userId).ToList();
         var studKpi = _repository.Query<StudentKpiDto>().Where(w => w.UserId == userId && w.CourseId != courseId && w.Point != null).ToList();
         var outcomes = _repository.Query<OutcomesCanvasDto>().ToList();
-        Debug.WriteLine($"GetAllCardsEnd sql {DateTime.Now.ToString("h:mm:ss.fff")}");
+        //Debug.WriteLine($"GetAllCardsEnd sql {DateTime.Now.ToString("h:mm:ss.fff")}");
         
         // rubric course 
         var ret = new List<OutcomeResult>();
@@ -80,12 +87,6 @@ public class OutcomeResultCollection : IOutcomeResultCollection
             {
                 card.Points = PointScale.Mastered;
             }
-
-            // card.CourseHistory = studKpi.Where(w 
-            //     => w.OutcomeId == criteria.OutcomeCanvasDto.Id && w.Point == (int)PointScale.Mastered
-            //        || w.CriteriaId == criteria.Id && w.Point==(int)PointScale.Mastered
-            //     
-            // ).Select(s=>s.CourseId).ToList();
             
             ret.Add(card);
         }
@@ -125,10 +126,13 @@ public class OutcomeResultCollection : IOutcomeResultCollection
         }
         
         
-        Debug.WriteLine($"GetAllCardsEnd {DateTime.Now.ToString("h:mm:ss.fff")}");
+        //Debug.WriteLine($"GetAllCardsEnd {DateTime.Now.ToString("h:mm:ss.fff")}");
         return ret;
     }
+
     
+   
+
     private int RubricAssociationId(int assignmentId)
     {
         var buff = _distributedCache.GetDistributedCache<string>("RubricAssociationId" + assignmentId);

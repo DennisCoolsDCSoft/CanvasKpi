@@ -26,17 +26,13 @@ public class OutcomeResult
     public bool Mastered => Points == PointScale.Mastered || CourseHistory.Count >0;
     public PointScale? Points { get; set; }  // per student
     
-    public string Description { get; private set; } = "";
-    public string LongDescription { get; private set; } = "";
+    public string Description { get; private set; }
+    public string LongDescription { get; private set; } 
     
     public string CriteriaId { get; } // criteriaId
     public string OutcomeId { get; } // general id over al courses
     
-    
-    
-    //ToDo ?CourseHistory?
     public List<int> CourseHistory { get; set; } = new();
-    public bool IsEditable { set; get; } = false;
+    public bool IsEditable { set; get; }
 
-    // is edit?
 }
