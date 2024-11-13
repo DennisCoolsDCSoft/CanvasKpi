@@ -1,4 +1,3 @@
-test
 # Canvas Kpi Tool Ovp Open
 Dotnetcore MVC webapp met ms sql database.
 
@@ -34,6 +33,9 @@ on mac
 docker run -e "ACCEPT_EULA=1" -e "MSSQL_SA_PASSWORD=MyPass@word" -e "MSSQL_PID=Developer" -e "MSSQL_USER=SA" -p 1433:1433 -d --name=sql mcr.microsoft.com/azure-sql-edge
 https://learn.microsoft.com/en-us/sql/azure-data-studio/download-azure-data-studio?view=sql-server-ver16
 create first table with azure-data-studio if using rider database tool.
+
+om mac M4 pro
+docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=MyPass@word" -e "MSSQL_PID=Evaluation" -p 1433:1433  --name sqlpreview --hostname sqlpreview -d mcr.microsoft.com/mssql/server:latest
 
 
 # database  
