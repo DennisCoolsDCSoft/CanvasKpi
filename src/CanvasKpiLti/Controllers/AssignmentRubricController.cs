@@ -92,7 +92,7 @@ public class AssignmentRubricController : Controller
             {
                 foreach (var outcomeGroup in competenceCell.OutcomeGroups)
                 {
-                    var masteredOutcomeGroup = outcomeGroup.MasteredOutcomeGroup;
+                   // var masteredOutcomeGroup = outcomeGroup.MasteredOutcomeGroup;
                     foreach (var outcomeResult in outcomeGroup.OutcomeResults)
                     {
                         if (outcomeResult.IsEditable == true)
@@ -105,7 +105,7 @@ public class AssignmentRubricController : Controller
 
                                 Points = outcomeResult.Points,
                                 Description = FormatDescription(outcomeResult.Description),
-                                CourseHistory = CourseHistoryComb(outcomeResult.CourseHistory, masteredOutcomeGroup),
+                                CourseHistory = outcomeResult.CourseHistory,
                                 CriteriaId = outcomeResult.CriteriaId,
                                 LongDescription = outcomeResult.LongDescription,
                                 OutcomeId = outcomeResult.OutcomeId,
@@ -122,12 +122,19 @@ public class AssignmentRubricController : Controller
 
     private List<int> CourseHistoryComb(List<int> outcomeResultCourseHistory, bool masteredOutcomeGroup)
     {
+        
        List<int> resultCourseHistory = new List<int>();
+
+       foreach (var oh in outcomeResultCourseHistory)
+       {
+           resultCourseHistory.Add(oh);
+       }
 
        if (masteredOutcomeGroup)
        {
            resultCourseHistory.Add(1);
        }
+
        return resultCourseHistory;
     }
 

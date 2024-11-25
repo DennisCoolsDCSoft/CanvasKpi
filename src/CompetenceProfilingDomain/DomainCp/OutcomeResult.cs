@@ -4,7 +4,7 @@ namespace CompetenceProfilingDomain.DomainCp;
 
 public class OutcomeResult
 {
-    public OutcomeResult(string criteriaId,string outcomeId,string description, string longDescription,ArchitectureHboEnum architectureHbo,CompetencesHboEnum competenceHbo,LevelsEnum level, int levelDivisorNumber)
+    public OutcomeResult(string criteriaId,string outcomeId,string description, string longDescription,ArchitectureHboEnum architectureHbo,CompetencesHboEnum competenceHbo,LevelsEnum level, int levelDivisorNumber,int courseId =0)
     {
         CriteriaId = criteriaId;
         OutcomeId = outcomeId;
@@ -15,13 +15,14 @@ public class OutcomeResult
         CompetenceHbo = competenceHbo;
         Level = level;
         LevelDivisorNumber = levelDivisorNumber;
-
+        CourseId = courseId;
     }
 
     public ArchitectureHboEnum ArchitectureHbo { get; }
     public CompetencesHboEnum CompetenceHbo { get; private set; }
     public LevelsEnum Level { get; private set; }
     public int LevelDivisorNumber { get; private set; }
+    public int CourseId { get; }
 
     public bool Mastered => Points == PointScale.Mastered || CourseHistory.Count >0;
     public PointScale? Points { get; set; }  // per student

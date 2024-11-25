@@ -43,7 +43,6 @@ public class OutcomeResultCollection : IOutcomeResultCollection
     
     public List<OutcomeResult> GetAllCards(int courseId, int assignmentId, int userId)
     {
-        //ToDo Slow
         //Debug.WriteLine($"GetAllCardsStart {DateTime.Now.ToString("h:mm:ss.fff")}");
         RubricAssociationId(assignmentId); // check rubric number
         
@@ -52,9 +51,7 @@ public class OutcomeResultCollection : IOutcomeResultCollection
         var submissionsCanvas = _assignmentRubricCriteriaRatingDao.SubmissionsByCourseAndAssignmentAndUser(courseId, assignmentId, userId);
         var submissionsStudent = _repository.Query<StudentAdviceDto>()
             .Where(w => w.CourseId == courseId & w.UserId == userId).ToList();
-        var studKpi = _repository.Query<StudentKpiDto>().Where(w => w.UserId == userId && w.CourseId != courseId && w.Point != null).ToList();
         var outcomes = _repository.Query<OutcomesCanvasDto>().ToList();
-        //Debug.WriteLine($"GetAllCardsEnd sql {DateTime.Now.ToString("h:mm:ss.fff")}");
         
         // rubric course 
         var ret = new List<OutcomeResult>();
@@ -67,15 +64,14 @@ public class OutcomeResultCollection : IOutcomeResultCollection
             OutcomeResult card;
             if (outcome == null)
             {
-                card = new OutcomeResult(criteria.Id, criteria.OutcomeCanvasDto.Id, criteria.Description, criteria.LongDescription,ArchitectureHboEnum.NotFound,CompetencesHboEnum.NotFound,LevelsEnum.NotFound,0);
+                card = new OutcomeResult(criteria.Id, criteria.OutcomeCanvasDto.Id, criteria.Description, criteria.LongDescription,ArchitectureHboEnum.NotFound,CompetencesHboEnum.NotFound,LevelsEnum.NotFound,0,courseId);
                 card.IsEditable = false;
             }
             else
             {
-                card = new OutcomeResult(criteria.Id, criteria.OutcomeCanvasDto.Id, criteria.Description, criteria.LongDescription,outcome.Architecture,outcome.Competence,outcome.Level,outcome.LevelDivisorNumber);
+                card = new OutcomeResult(criteria.Id, criteria.OutcomeCanvasDto.Id, criteria.Description, criteria.LongDescription,outcome.Architecture,outcome.Competence,outcome.Level,outcome.LevelDivisorNumber,courseId);
                 card.IsEditable = true;
             }
-            
             
             if(subStud!= null) // stud advises geel
             {
@@ -117,14 +113,12 @@ public class OutcomeResultCollection : IOutcomeResultCollection
                 outcomes.FirstOrDefault(f => f.LmsId == studhis.OutcomeId || f.CriteriaId == studhis.CriteriaId);
             if (outcome!= null)
             {
-                var cardhist = new OutcomeResult(studhis.CriteriaId, studhis.OutcomeId, outcome.Title, $"_{studhis.CourseId}_{studhis.Point}", outcome.Architecture, outcome.Competence,outcome.Level,outcome.LevelDivisorNumber);
+                var cardhist = new OutcomeResult(studhis.CriteriaId, studhis.OutcomeId, outcome.Title, $"_{studhis.CourseId}_{studhis.Point}", outcome.Architecture, outcome.Competence,outcome.Level,outcome.LevelDivisorNumber,studhis.CourseId);
                 cardhist.IsEditable = false;
                 cardhist.Points = (PointScale?)studhis.Point;
-                if(studhis.Point !=null) cardhist.CourseHistory.Add(studhis.CourseId);
                 ret.Add(cardhist);
             }
         }
-        
         
         //Debug.WriteLine($"GetAllCardsEnd {DateTime.Now.ToString("h:mm:ss.fff")}");
         return ret;
